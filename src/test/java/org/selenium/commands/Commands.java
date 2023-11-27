@@ -40,4 +40,33 @@ public class Commands extends Base {
         Assert.assertEquals(actualId,expectedLoginId,"user login failed");
 
     }
+    @Test
+    public void verifyDemoToursRegistration(){
+        driver.get("https://demo.guru99.com/selenium/newtours/register.php");
+        WebElement firstName= driver.findElement(By.name("firstName"));
+        firstName.sendKeys("nandu");
+        WebElement lastName=driver.findElement(By.name("lastName"));
+        lastName.sendKeys("vs");
+        WebElement phoneNum= driver.findElement(By.name("phone"));
+        phoneNum.sendKeys("07025985324");
+        WebElement eMail= driver.findElement(By.id("Email"));
+        eMail.sendKeys("nanduvs01@gmail.com");
+        WebElement addressField= driver.findElement(By.name("address"));
+        addressField.sendKeys("attingal");
+        WebElement cityName=driver.findElement(By.name("city"));
+        cityName.sendKeys("trivandrum");
+        WebElement stateName=driver.findElement(By.name("state"));
+        stateName.sendKeys("kerala");
+        WebElement postalCode=driver.findElement(By.name("postalCode"));
+        postalCode.sendKeys("659605");
+        WebElement userNameField=driver.findElement(By.id("userName"));
+        userNameField.sendKeys("nandu");
+        WebElement passWord=driver.findElement(By.id("passWord"));
+        passWord.sendKeys("123456");
+        WebElement confirmPassword=driver.findElement(By.id("confirmPassword"));
+        confirmPassword.sendKeys("123456");
+        WebElement submitButton=driver.findElement(By.name("submit"));
+        submitButton.click();
+
+    }
 }
