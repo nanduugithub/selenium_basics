@@ -51,7 +51,7 @@ public class Commands extends Base {
         phoneNum.sendKeys("07025985324");
         WebElement eMail= driver.findElement(By.id("Email"));
         eMail.sendKeys("nanduvs01@gmail.com");
-        WebElement addressField= driver.findElement(By.name("address"));
+        WebElement addressField= driver.findElement(By.name("address1"));
         addressField.sendKeys("attingal");
         WebElement cityName=driver.findElement(By.name("city"));
         cityName.sendKeys("trivandrum");
@@ -61,12 +61,34 @@ public class Commands extends Base {
         postalCode.sendKeys("659605");
         WebElement userNameField=driver.findElement(By.id("userName"));
         userNameField.sendKeys("nandu");
-        WebElement passWord=driver.findElement(By.id("passWord"));
+        WebElement passWord=driver.findElement(By.name("password"));
         passWord.sendKeys("123456");
-        WebElement confirmPassword=driver.findElement(By.id("confirmPassword"));
+        WebElement confirmPassword=driver.findElement(By.name("confirmPassword"));
         confirmPassword.sendKeys("123456");
         WebElement submitButton=driver.findElement(By.name("submit"));
         submitButton.click();
+
+    }
+
+    @Test
+    public void verifyLinkedAndPartialLink(){
+        driver.get("https://demo.guru99.com/selenium/newtours/");
+        WebElement yourDestination=driver.findElement(By.linkText("your destination"));
+        yourDestination.click();
+    }
+    @Test
+    public void verifyPartialLInk(){
+        driver.get("https://demo.guru99.com/selenium/newtours/");
+        WebElement destination= driver.findElement(By.partialLinkText("destination"));
+        destination.click();
+    }
+    @Test
+    public void validateDemoWebShopUserLogin(){
+        driver.get("https://demowebshop.tricentis.com/");
+        WebElement login= driver.findElement(By.xpath("/html/body/div[4]/div[1]/div[1]/div[2]/div[1]/ul/li[2]/a"));
+        login.click();
+        WebElement email= driver.findElement(By.xpath("//*[@id=\"Email\"]"));
+        
 
     }
 }
