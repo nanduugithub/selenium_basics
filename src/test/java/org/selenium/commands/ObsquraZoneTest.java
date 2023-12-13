@@ -2,8 +2,12 @@ package org.selenium.commands;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ObsquraZoneTest extends Base {
 
@@ -86,8 +90,63 @@ public class ObsquraZoneTest extends Base {
         String expectedResult = "Form has been submitted successfully!";
         Assert.assertEquals(actualResult, expectedResult, "Form submission unsuccessful");
 
-
     }
 
+    @Test
+    public void verifyColorSelectFromDropDown() {
+        driver.get("https://selenium.obsqurazone.com/select-input.php");
+        WebElement dropDown = driver.findElement(By.xpath("//select[@id='single-input-field']"));
+        Select select = new Select(dropDown);
+        select.selectByIndex(2);
+        WebElement selectedColor = select.getFirstSelectedOption();
+        WebElement message = driver.findElement(By.xpath("//div[@id='message-one']"));
+        String actualResult = message.getText();
+        String expectedResult = "Selected Color : Yellow";
+        Assert.assertEquals(actualResult, expectedResult, "color not selected");
+    }
 
+    @Test
+    public void verifyTotalNumberOfValuesInDropDown() {
+        driver.get("https://selenium.obsqurazone.com/select-input.php");
+        WebElement colorDropDown = driver.findElement(By.xpath("//select[@class='form-control']"));
+        Select select = new Select(colorDropDown);
+        List<WebElement> dropDownSize = select.getOptions();
+        int actualResult = dropDownSize.size();
+        int expectedResult = 4;
+        Assert.assertEquals(actualResult, expectedResult, "invalid size");
+    }
+
+    @Test
+    public void verifyValuesInColorSelectDropDown() {
+        driver.get("https://selenium.obsqurazone.com/select-input.php");
+        WebElement colourDropDown = driver.findElement(By.xpath("//select[@class='form-control']"));
+        Select select = new Select(colourDropDown);
+        List<WebElement> element = select.getOptions();
+        List<String> actual = new ArrayList<>();
+        for (WebElement e : element) {
+            String colors = e.getText();
+            actual.add(colors);
+        }
+        List<String> expected = new ArrayList<>();
+        expected.add("-- Select --");
+        expected.add("Red");
+        expected.add("Yellow");
+        expected.add("Green");
+        Assert.assertEquals(actual, expected, "invalid selection");
+    }
+
+    @Test
+    public void verifyDropDownWithoutSelect() {
+        driver.get("https://selenium.obsqurazone.com/jquery-select.php");
+        WebElement stateDropDown = driver.findElement(By.xpath("//span[@class='select2-selection select2-selection--single']//span[@class='select2-selection__arrow']"));
+        stateDropDown.click();
+        List<WebElement> DropDownWithoutSelect = driver.findElements(By.xpath("//li[contains(@class,'select2-results__option select2-results__option--selectable')]"));
+        for (WebElement dropDownValueElements : DropDownWithoutSelect) {
+            String selectedState = dropDownValueElements.getText();
+            if (selectedState.equals("California")) {
+                dropDownValueElements.click();
+                break;
+            }
+        }
+    }
 }

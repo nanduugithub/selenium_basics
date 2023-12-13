@@ -293,11 +293,11 @@ public class Commands extends Base {
         WebElement submitButton = driver.findElement(By.xpath("//input[@type='submit']"));
         submitButton.click();
         Alert alert = driver.switchTo().alert();
+        String deleteConfirmationBox= alert.getText();
         alert.accept();
         String actualResult=alert.getText();
         Assert.assertEquals(actualResult,"Customer Successfully Delete!","not deleted");
         alert.accept();
-
 
     }
 }
