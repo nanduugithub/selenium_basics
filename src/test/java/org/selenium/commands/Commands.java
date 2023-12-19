@@ -1,13 +1,20 @@
 package org.selenium.commands;
 
+import com.sun.source.tree.WhileLoopTree;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import javax.swing.*;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class Commands extends Base {
 
@@ -293,12 +300,94 @@ public class Commands extends Base {
         WebElement submitButton = driver.findElement(By.xpath("//input[@type='submit']"));
         submitButton.click();
         Alert alert = driver.switchTo().alert();
-        String deleteConfirmationBox= alert.getText();
+        String deleteConfirmationBox = alert.getText();
         alert.accept();
-        String actualResult=alert.getText();
-        Assert.assertEquals(actualResult,"Customer Successfully Delete!","not deleted");
+        String actualResult = alert.getText();
+        Assert.assertEquals(actualResult, "Customer Successfully Delete!", "not deleted");
         alert.accept();
 
+    }
+
+    @Test
+    public void verifyMultipleWindowHandling() {
+        driver.get("https://demo.guru99.com/popup.php");
+        String parentWindowHandleId = driver.getWindowHandle();
+        System.out.println(parentWindowHandleId);
+        WebElement clickHere = driver.findElement(By.xpath("//a[@target='_blank']"));
+        clickHere.click();
+        Set<String> parentWindowHandle = new HashSet<>();
+        System.out.println(parentWindowHandle);
+        Iterator<String> childWindowId = parentWindowHandle.iterator();
+        while (childWindowId.hasNext()) {
+            String handleId = childWindowId.next();
+            if (!handleId.equals(parentWindowHandleId)) {
+                System.out.println("parent window of chid" + handleId);
+                driver.switchTo().window(handleId);
+                WebElement eMailId = driver.findElement(By.xpath("//input[@type='text']"));
+                eMailId.sendKeys("nanduvs01@gmail.com");
+                WebElement submitButton = driver.findElement(By.xpath("//input[@value='Submit']"));
+                submitButton.click();
+                driver.close();
+            }
+        }
+        driver.switchTo().window(parentWindowHandleId);
+    }
+    @Test
+    public void verifyFrames(){
+        driver.get("https://demoqa.com/frames");
+        List<WebElement>iFrameTags=driver.findElements(By.tagName("iframe"));
+        int size= iFrameTags.size();
+        System.out.println("Total number of iframes in the webpage"+size);
+        //driver.switchTo().frame(3);
+        //driver.switchTo().frame("frame1");
+        WebElement frame= driver.findElement(By.id("frame1"));
+        driver.switchTo().frame(frame);
+        WebElement frameText= driver.findElement(By.id("sampleHeading"));
+        System.out.println("iframe text ="+frameText.getText());
+        driver.switchTo().defaultContent();
+
+    }
+    @Test
+    public void verifyRightClick(){
+        driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+        WebElement rightClickButton= driver.findElement(By.xpath("//span[@class='context-menu-one btn btn-neutral']"));
+        Actions action=new Actions(driver);
+        action.contextClick(rightClickButton).build().perform();
+    }
+    @Test
+    public void verifyDoubleClick(){
+        driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+        WebElement doubleClickButton= driver.findElement(By.xpath("//button[text()='Double-Click Me To See Alert']"));
+        Actions actions=new Actions(driver);
+        actions.doubleClick(doubleClickButton).build().perform();
+        Alert alert=driver.switchTo().alert();
+        String alertText=alert.getText();
+        System.out.println(alertText);
+        alert.accept();
+    }
+    @Test
+    public void verifyDragAndDrop(){
+        driver.get("https://demoqa.com/droppable");
+        WebElement dragButton= driver.findElement(By.id("draggable"));
+        WebElement dropButton=driver.findElement(By.id("droppable"));
+        Actions actions=new Actions(driver);
+        actions.dragAndDrop(dropButton,dragButton).build().perform();
+    }
+    @Test
+    public  void verifyDragAndDropByOffset(){
+        driver.get("https://demoqa.com/droppable");
+        WebElement dragBox= driver.findElement(By.id("dragBox"));
+        Actions action=new Actions(driver);
+        action.dragAndDropBy(dragBox,150,150).build().perform();
+    }
+    @Test
+    public void verifyMouseOver(){
+        driver.get("https://demoqa.com/menu/");
+        WebElement selectItemButton= driver.findElement(By.xpath("//a[text()='Main Item 2']"));
+        Actions actions=new Actions(driver);
+        actions.moveToElement(selectItemButton).build().perform();
+        WebElement subListButton= driver.findElement(By.xpath("//a[text()='SUB SUB LIST »']"));
+        actions.moveToElement(subListButton).build().perform();
     }
 }
 
