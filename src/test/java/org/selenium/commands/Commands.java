@@ -1,22 +1,18 @@
 package org.selenium.commands;
 
-import com.sun.source.tree.WhileLoopTree;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import javax.swing.*;
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class Commands extends Base {
+public class Commands extends BrowerLaunch {
 
     @Test
     public void verifySwagLabsUserLogin() {
@@ -332,62 +328,151 @@ public class Commands extends Base {
         }
         driver.switchTo().window(parentWindowHandleId);
     }
+
     @Test
-    public void verifyFrames(){
+    public void verifyFrames() {
         driver.get("https://demoqa.com/frames");
-        List<WebElement>iFrameTags=driver.findElements(By.tagName("iframe"));
-        int size= iFrameTags.size();
-        System.out.println("Total number of iframes in the webpage"+size);
+        List<WebElement> iFrameTags = driver.findElements(By.tagName("iframe"));
+        int size = iFrameTags.size();
+        System.out.println("Total number of iframes in the webpage" + size);
         //driver.switchTo().frame(3);
         //driver.switchTo().frame("frame1");
-        WebElement frame= driver.findElement(By.id("frame1"));
+        WebElement frame = driver.findElement(By.id("frame1"));
         driver.switchTo().frame(frame);
-        WebElement frameText= driver.findElement(By.id("sampleHeading"));
-        System.out.println("iframe text ="+frameText.getText());
+        WebElement frameText = driver.findElement(By.id("sampleHeading"));
+        System.out.println("iframe text =" + frameText.getText());
         driver.switchTo().defaultContent();
 
     }
+
     @Test
-    public void verifyRightClick(){
+    public void verifyRightClick() {
         driver.get("https://demo.guru99.com/test/simple_context_menu.html");
-        WebElement rightClickButton= driver.findElement(By.xpath("//span[@class='context-menu-one btn btn-neutral']"));
-        Actions action=new Actions(driver);
+        WebElement rightClickButton = driver.findElement(By.xpath("//span[@class='context-menu-one btn btn-neutral']"));
+        Actions action = new Actions(driver);
         action.contextClick(rightClickButton).build().perform();
     }
+
     @Test
-    public void verifyDoubleClick(){
+    public void verifyDoubleClick() {
         driver.get("https://demo.guru99.com/test/simple_context_menu.html");
-        WebElement doubleClickButton= driver.findElement(By.xpath("//button[text()='Double-Click Me To See Alert']"));
-        Actions actions=new Actions(driver);
+        WebElement doubleClickButton = driver.findElement(By.xpath("//button[text()='Double-Click Me To See Alert']"));
+        Actions actions = new Actions(driver);
         actions.doubleClick(doubleClickButton).build().perform();
-        Alert alert=driver.switchTo().alert();
-        String alertText=alert.getText();
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
         System.out.println(alertText);
         alert.accept();
     }
+
     @Test
-    public void verifyDragAndDrop(){
+    public void verifyDragAndDrop() {
         driver.get("https://demoqa.com/droppable");
-        WebElement dragButton= driver.findElement(By.id("draggable"));
-        WebElement dropButton=driver.findElement(By.id("droppable"));
-        Actions actions=new Actions(driver);
-        actions.dragAndDrop(dropButton,dragButton).build().perform();
+        WebElement dragButton = driver.findElement(By.id("draggable"));
+        WebElement dropButton = driver.findElement(By.id("droppable"));
+        Actions actions = new Actions(driver);
+        actions.dragAndDrop(dropButton, dragButton).build().perform();
     }
+
     @Test
-    public  void verifyDragAndDropByOffset(){
+    public void verifyDragAndDropByOffset() {
         driver.get("https://demoqa.com/droppable");
-        WebElement dragBox= driver.findElement(By.id("dragBox"));
-        Actions action=new Actions(driver);
-        action.dragAndDropBy(dragBox,150,150).build().perform();
+        WebElement dragBox = driver.findElement(By.id("dragBox"));
+        Actions action = new Actions(driver);
+        action.dragAndDropBy(dragBox, 150, 150).build().perform();
     }
+
     @Test
-    public void verifyMouseOver(){
+    public void verifyMouseOver() {
         driver.get("https://demoqa.com/menu/");
-        WebElement selectItemButton= driver.findElement(By.xpath("//a[text()='Main Item 2']"));
-        Actions actions=new Actions(driver);
+        WebElement selectItemButton = driver.findElement(By.xpath("//a[text()='Main Item 2']"));
+        Actions actions = new Actions(driver);
         actions.moveToElement(selectItemButton).build().perform();
-        WebElement subListButton= driver.findElement(By.xpath("//a[text()='SUB SUB LIST »']"));
+        WebElement subListButton = driver.findElement(By.xpath("//a[text()='SUB SUB LIST »']"));
         actions.moveToElement(subListButton).build().perform();
+    }
+
+    @Test
+    public void verifyJavaScriptClickAndSendKeys() {
+        driver.get("https://demowebshop.tricentis.com/");
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("document.getElementById('newsletter-email').value='test@test.com'");
+        js.executeScript("document.getElementById('newsletter-subscribe-button').click()");
+    }
+
+    @Test
+    public void verifyVerticalScroll() {
+        driver.get("https://demowebshop.tricentis.com/");
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0,document.body.scrollHeight)");
+    }
+
+    @Test
+    public void verifyScreenshotAfterTestFail() {
+        driver.get("https://selenium.obsqurazone.com/simple-form-demo.php");
+        WebElement enterMessage = driver.findElement(By.xpath("//input[@type='text']"));
+        enterMessage.sendKeys("hai all");
+        WebElement showMessage = driver.findElement(By.xpath("//button[@id='button-one']"));
+        showMessage.click();
+        WebElement yourMessage = driver.findElement(By.xpath("//div[@class='my-2']"));
+        String actualResult = yourMessage.getText();
+        String expectedResult = "Your Message : hai ";
+        Assert.assertEquals(actualResult, expectedResult, "message invalid");
+    }
+
+    @Test
+    public void verifyWait() throws InterruptedException {
+        driver.get("https://demoqa.com/alerts");
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("timerAlertButton")));
+        WebElement clickButton = driver.findElement(By.id("timerAlertButton"));
+        clickButton.click();
+        //Thread.sleep(6000);
+        wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+    }
+
+    @Test
+    public void verifyFluentWait() throws InterruptedException {
+        driver.get("https://demoqa.com/alerts");
+        FluentWait wait = new FluentWait(driver);
+        wait.withTimeout(Duration.ofSeconds(20));
+        wait.pollingEvery(Duration.ofSeconds(2));
+        wait.ignoring(NoSuchElementException.class);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("timerAlertButton")));
+        WebElement clickButton = driver.findElement(By.xpath("timerAlertButton"));
+        clickButton.click();
+        wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+    }
+
+    @Test
+    public void verifyDifferenceBetweenFindElementAndFindElements() {
+        driver.get("https://demowebshop.tricentis.com/");
+        WebElement subscribeButton = driver.findElement(By.id("newsletter-subscribe-button"));
+        System.out.println("Webelement on match" + subscribeButton);
+        List<WebElement> communityPole = driver.findElements(By.xpath("//li[@class='answer']//label"));
+        int size = communityPole.size();
+        System.out.println("List of size on match" + size);
+        //On ZeroMatch
+        List<WebElement> communityPollonZeroMatch = driver.findElements(By.xpath("//li[@class='answer123']//label"));
+        int sizeonzeromatch = communityPollonZeroMatch.size();
+        System.out.println("Size of list on zero match " + sizeonzeromatch);
+        //WebElement subscribeButtonZeroMatch=driver.findElement(By.id("newsletter-subscribe-button123"));
+        //On Oneplus Match
+        WebElement communityPollonOnePlusMatch = driver.findElement(By.xpath("//li[@class='answer']//label"));
+        communityPollonOnePlusMatch.click();
+    }
+
+    @Test
+    public void verifyDiffBetweenCloseAndQuit() {
+        driver.get("https://demo.guru99.com/popup.php");
+        WebElement clickButton = driver.findElement(By.linkText("Click Here"));
+        clickButton.click();
     }
 }
 
