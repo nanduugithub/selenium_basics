@@ -1,6 +1,7 @@
 package testngcommands;
 
 import automationcore.Base;
+import net.bytebuddy.build.Plugin;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.selenium.constants.Constants;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageTest extends Base {
-    @Test
+    @Test(priority = 1)
     public void verifyHomePageTitle() {
         String actualResult = driver.getTitle();
         ArrayList<String> data = ExcelUtility.readData(Constants.TEST_DATA_EXCEL_PATH, Constants.HOME_PAGE);
@@ -22,7 +23,7 @@ public class HomePageTest extends Base {
 
     }
 
-    @Test
+    @Test(priority = 2)
     public void verifyCommunityPollSelection() {
         List<WebElement> pollTexts = driver.findElements(By.xpath("//li[@class='answer']//label[starts-with(@for,'Excellent')]"));
         for (WebElement values : pollTexts) {

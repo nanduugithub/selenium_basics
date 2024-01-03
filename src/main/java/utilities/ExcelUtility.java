@@ -20,17 +20,11 @@ public class ExcelUtility {
         try {
             String path = Constants.HOME_DIRECTORY + file_path;
             file = new FileInputStream(path);
-        }
-        catch (FileNotFoundException ex)
-        {
-            throw new RuntimeException(ex);
-        }
-        try {
             wb =new XSSFWorkbook(file);
         }
-        catch (IOException ex)
+        catch (Exception ex)
         {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("Test data excel sheet not found");
         }
         sh =wb.getSheet(sheet);
         ArrayList<String>excelRows=new ArrayList<>();

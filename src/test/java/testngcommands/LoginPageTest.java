@@ -13,7 +13,7 @@ import utilities.ExcelUtility;
 import java.util.ArrayList;
 
 public class LoginPageTest extends Base {
-    @Test
+    @Test(priority = 5)
     public void verifyLoginPageTitle(){
         WebElement loginField= driver.findElement(By.xpath("//a[@class='ico-login']"));
         loginField.click();
@@ -22,7 +22,7 @@ public class LoginPageTest extends Base {
         String expectedResult= data.get(1);
         Assert.assertEquals(actualPageTitle,expectedResult, Messages.TITLE_MISMATCH);
     }
-    @Test
+    @Test(priority = 6)
     public void verifyUserLogin(){
         WebElement loginField= driver.findElement(By.xpath("//a[@class='ico-login']"));
         loginField.click();
@@ -38,7 +38,7 @@ public class LoginPageTest extends Base {
         Assert.assertEquals(actualResult,expectedResult,Messages.LOGIN_FAILED);
     }
 
-    @Test(priority = 1,dataProvider = "InvalidUserCredentials", dataProviderClass = DataProviders.class)
+    @Test(priority = 7,dataProvider = "InvalidUserCredentials", dataProviderClass = DataProviders.class)
     public void verifyUserLoginWithInvalidValidation(String username,String  password)  {
         WebElement loginField = driver.findElement(By.xpath("//a[@class='ico-login']"));
         loginField.click();
